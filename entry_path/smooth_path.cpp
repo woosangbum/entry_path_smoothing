@@ -25,14 +25,17 @@ SmoothPath::SmoothPath(Point startPoint, vector<Point> area, float rq, int sp)
 
     this->num_major_points = entryPath.size();
     this->num_smooth_points = sp;
-    this->num_minor_points = this->num_smooth_points;
+    this->num_minor_points = this->num_smooth_points + 2;
 
     // round qualities
     this->round_qualities = rq;
 
     // Calculate coordinates of the polygon major and minor points (de Casteljan algorithm)
     this->setMajorPoints(entryPath);
+    this->minor_points.push_back(startPoint);
     this->calcMinorPointsCenter();
+    this->minor_points.push_back(this->secondPoint);
+
 }
 
 
@@ -64,7 +67,6 @@ void SmoothPath::calcMinorPointsCenter()
     float t;  // t parameter for Bezier points calculation (0 - 1)
     int centerI = this->major_points.size()/2;
     // Clear the vector of minor polygon points
-    this->minor_points.clear();
     
     cur_major_point = this->major_points[centerI];
 
